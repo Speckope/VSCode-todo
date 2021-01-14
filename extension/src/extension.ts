@@ -8,6 +8,13 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.registerWebviewViewProvider('vstodo-sidebar', sidebarProvider)
   );
 
+  const item = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Right
+  );
+  item.text = '$(add) Add Todo';
+  item.command = 'vstodo.addTodo';
+  item.show();
+
   context.subscriptions.push(
     vscode.commands.registerCommand('vstodo.addTodo', () => {
       const { activeTextEditor } = vscode.window;
@@ -20,6 +27,11 @@ export function activate(context: vscode.ExtensionContext) {
       const text = activeTextEditor.document.getText(
         activeTextEditor.selection
       );
+
+      sidebarProvider._view?.webview.postMessage({
+        type: 'new-todo',
+        value: text,
+      });
     })
   );
 
