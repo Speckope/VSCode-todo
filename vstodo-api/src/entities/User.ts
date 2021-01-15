@@ -5,6 +5,9 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('text')
+  @Column('text', { nullable: true }) // means it can be null
   name: string;
+
+  @Column('text', { unique: true }) // { unique: true } is a constraint!
+  githubId: string;
 }
